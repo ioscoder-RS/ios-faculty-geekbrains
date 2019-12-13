@@ -142,23 +142,23 @@ class GameScene: SKScene {
     }//func didMove
     
     func createApple(){
-        let randX =  CGFloat(arc4random_uniform(UInt32(gameRect.maxX)))
-        
+        var randX:UInt32
+        randX =  arc4random_uniform(UInt32(gameRect.maxX))
+        if randX >= 410{randX = 409} //чтобы яблоко не попадало за пределы прямоугольника
         var randY:UInt32
         randY = arc4random_uniform(UInt32(gameRect.maxY))
         if randY <= 100{randY = 101} //чтобы яблоко не попадало за пределы прямоугольника
         
         
-        apple = Apple(position: CGPoint(x: randX, y: CGFloat(randY)))
+        apple = Apple(position: CGPoint(x: CGFloat(randX), y: CGFloat(randY)))
+        //apple = Apple(position: CGPoint(x: CGFloat(410), y: CGFloat(796)))
         self.addChild(apple!)
         
         //отладочный принт
-     //   print("randX = \(randX),randY = \(randY) gameRect.minX = \(gameRect.minX), gameRect.maxX= \(gameRect.maxX), gameRect.minY = \(gameRect.minY),gameRect.maxY = \(gameRect.maxY), gameRect.width = \(gameRect.width), gameRect.height = \(gameRect.height),xStartPosition = \(xStartPosition), yStartPosition = \(yStartPosition), shiftForButton = \(shiftForButton)")
+      // print("randX = \(randX),randY = \(randY) gameRect.minX = \(gameRect.minX), gameRect.maxX= \(gameRect.maxX), gameRect.minY = \(gameRect.minY),gameRect.maxY = \(gameRect.maxY), gameRect.width = \(gameRect.width), gameRect.height = \(gameRect.height),xStartPosition = \(xStartPosition), yStartPosition = \(yStartPosition), shiftForButton = \(shiftForButton)")
     }
     
-
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
        
         for touch in touches{
             let touchLocation = touch.location(in: self)
@@ -182,8 +182,6 @@ class GameScene: SKScene {
         }
     }//func touchesBegan
     
- 
-    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         //если касаемся кнопки - красим кнопку в зеленый цвет
         for touch in touches{
@@ -191,17 +189,13 @@ class GameScene: SKScene {
             guard let touchesNode = self.atPoint(touchLocation) as? SKShapeNode, touchesNode.name == "leftCounterClockwiseButton" || touchesNode.name == "clockWiseButton" else{
                 return
             }
-            
             touchesNode.fillColor = UIColor.gray
-            
         }
    
     }//func touchesEnded
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
- 
     }
-    
     
     override func update(_ currentTime: TimeInterval) {
         // если не выставлен флаг конец игры, то змея двигается. Иначе - нет
